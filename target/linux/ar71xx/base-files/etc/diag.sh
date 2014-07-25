@@ -124,6 +124,9 @@ get_status_led() {
 	om2p-lc)
 		status_led="om2p:blue:power"
 		;;
+	om5p)
+		status_led="om5p:blue:power"
+		;;
 	pb44)
 		status_led="pb44:amber:jump1"
 		;;
@@ -204,6 +207,7 @@ get_status_led() {
 	tl-wr941nd)
 		status_led="tp-link:green:system"
 		;;
+	archer-c5 | \
 	archer-c7 | \
 	tl-wdr4900-v2 | \
 	tl-mr10u | \
@@ -229,6 +233,9 @@ get_status_led() {
 	uap-pro)
 		status_led="ubnt:white:dome"
 		;;
+	airgateway)
+		status_led="ubnt:white:status"
+		;;
 	whr-g301n | \
 	whr-hp-g300n | \
 	whr-hp-gn | \
@@ -244,6 +251,7 @@ get_status_led() {
 		;;
 	wndap360 | \
 	wndr3700 | \
+	wndr3700v4 | \
 	wndr4300 | \
 	wnr2000 | \
 	wnr2200 |\

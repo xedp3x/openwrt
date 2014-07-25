@@ -1115,6 +1115,7 @@ $(eval $(call SingleProfile,Netgear,64kraw,WNDRMAC,wndrmac,WNDR3700,ttyS0,115200
 $(eval $(call SingleProfile,Netgear,64kraw,WNDRMACV2,wndrmacv2,WNDR3700,ttyS0,115200,$$(wndr3700v2_mtdlayout),0x33373031,WNDRMACv2,"",-H 29763654+16+128))
 
 $(eval $(call SingleProfile,OpenMesh,squashfs-only,OM2P,om2p,,,,OM2P))
+$(eval $(call SingleProfile,OpenMesh,squashfs-only,OM5P,om5p,,,,OM5P))
 $(eval $(call SingleProfile,OpenMesh,squashfs-only,MR600,mr600,,,,MR600))
 
 $(eval $(call SingleProfile,PB4X,128k,ALL0305,all0305,ALL0305,ttyS0,115200))
@@ -1159,6 +1160,7 @@ $(eval $(call SingleProfile,TPLINK,64kraw,TLWR941NV3,tl-wr941nd-v3,TL-WR941ND,tt
 $(eval $(call SingleProfile,TPLINK,64kraw,TLWR941NV4,tl-wr941nd-v4,TL-WR741ND,ttyS0,115200,0x09410004,1,4M))
 $(eval $(call SingleProfile,TPLINK,64kraw,TLWR1043V1,tl-wr1043nd-v1,TL-WR1043ND,ttyS0,115200,0x10430001,1,8M))
 
+$(eval $(call SingleProfile,TPLINK-LZMA,64kraw,ARCHERC5,archer-c5,ARCHER-C5,ttyS0,115200,0xc5000001,1,16Mlzma))
 $(eval $(call SingleProfile,TPLINK-LZMA,64kraw,ARCHERC7V1,archer-c7-v1,ARCHER-C7,ttyS0,115200,0x75000001,1,8Mlzma))
 $(eval $(call SingleProfile,TPLINK-LZMA,64kraw,ARCHERC7V2,archer-c7-v2,ARCHER-C7,ttyS0,115200,0xc7000002,1,16Mlzma))
 $(eval $(call SingleProfile,TPLINK-LZMA,64kraw,ELM150,el-m150,EL-M150,ttyATH0,115200,0x01500101,1,8Mlzma))
@@ -1218,6 +1220,7 @@ $(eval $(call SingleProfile,UBNTXM,64kraw,UBNTNANOM,ubnt-nano-m,UBNT-NM,ttyS0,11
 $(eval $(call SingleProfile,UBNTXM,64kraw,UBNTUNIFI,ubnt-unifi,UBNT-UF,ttyS0,115200,XM,BZ,ar7240))
 $(eval $(call SingleProfile,UBNTXM,64kraw,UBNTUNIFIOUTDOOR,ubnt-unifi-outdoor,UBNT-U20,ttyS0,115200,XM,BZ,ar7240))
 $(eval $(call SingleProfile,UBNTXM,64kraw,UBNTNANOMXW,ubnt-nano-m-xw,UBNT-NM-XW,ttyS0,115200,XM,XW,ar934x))
+$(eval $(call SingleProfile,UBNTXM,64kraw,UBNTAIRGW,ubnt-air-gateway,UBNT-AGW,ttyATH0,115200,XM,AirGW,ar933x))
 
 $(eval $(call SingleProfile,WHRHPG300N,64kraw,WHRG301N,whr-g301n,WHR-G301N,ttyS0,115200,$$(whrhpg300n_mtdlayout),WHR-G301N))
 $(eval $(call SingleProfile,WHRHPG300N,64kraw,WHRHPG300N,whr-hp-g300n,WHR-HP-G300N,ttyS0,115200,$$(whrhpg300n_mtdlayout),WHR-HP-G300N))
@@ -1239,9 +1242,9 @@ $(eval $(call SingleProfile,ZyXEL,64k,NBG_460N_550N_550NH,nbg460n_550n_550nh,NBG
 
 $(eval $(call MultiProfile,AP121,AP121_2M AP121_4M))
 $(eval $(call MultiProfile,AP136,AP136_010 AP136_020))
-$(eval $(call MultiProfile,ARCHERC7, ARCHERC7V1 ARCHERC7V2))
+$(eval $(call MultiProfile,ARCHERC7, ARCHERC5 ARCHERC7V1 ARCHERC7V2))
 $(eval $(call MultiProfile,EWDORIN, EWDORINAP EWDORINRT EWDORIN16M))
-$(eval $(call MultiProfile,OPENMESH,OM2P MR600))
+$(eval $(call MultiProfile,OPENMESH,OM2P OM5P MR600))
 $(eval $(call MultiProfile,TEW652BRP,TEW652BRP_FW TEW652BRP_RECOVERY))
 $(eval $(call MultiProfile,TLMR11U,TLMR11UV1 TLMR11UV2))
 $(eval $(call MultiProfile,TLMR3040,TLMR3040V1 TLMR3040V2))
@@ -1262,7 +1265,7 @@ $(eval $(call MultiProfile,TLWR941,TLWR941NV2 TLWR941NV3 TLWR941NV4 TLWR941NV6))
 $(eval $(call MultiProfile,TLWR1043,TLWR1043V1 TLWR1043V2))
 $(eval $(call MultiProfile,TLWDR4300,TLWDR3500V1 TLWDR3600V1 TLWDR4300V1 TLWDR4300V1IL TLWDR4310V1 MW4530RV1))
 $(eval $(call MultiProfile,TUBE2H,TUBE2H8M TUBE2H16M))
-$(eval $(call MultiProfile,UBNT,UBNTAIRROUTER UBNTRS UBNTRSPRO UBNTLSSR71 UBNTBULLETM UBNTROCKETM UBNTNANOM UBNTNANOMXW UBNTUNIFI UBNTUNIFIOUTDOOR UAPPRO))
+$(eval $(call MultiProfile,UBNT,UBNTAIRROUTER UBNTRS UBNTRSPRO UBNTLSSR71 UBNTBULLETM UBNTROCKETM UBNTNANOM UBNTNANOMXW UBNTUNIFI UBNTUNIFIOUTDOOR UAPPRO UBNTAIRGW))
 $(eval $(call MultiProfile,WNDR3700,WNDR3700V1 WNDR3700V2 WNDR3800 WNDRMAC WNDRMACV2))
 $(eval $(call MultiProfile,WNR612V2,REALWNR612V2 N150R))
 $(eval $(call MultiProfile,WP543,WP543_2M WP543_4M WP543_8M WP543_16M))
@@ -1273,7 +1276,7 @@ $(eval $(call MultiProfile,Madwifi,EAP7660D UBNTRS UBNTRSPRO UBNTLSSR71 WP543))
 endif # ifeq ($(SUBTARGET),generic)
 
 ifeq ($(SUBTARGET),nand)
-$(eval $(call SingleProfile,NetgearNAND,64k,WNDR3700V4,wndr3700v4,WNDR4300,ttyS0,115200,$$(wndr4300_mtdlayout),0x33373033,WNDR3700v4,"",-H 29763948+128+128,wndr4300))
+$(eval $(call SingleProfile,NetgearNAND,64k,WNDR3700V4,wndr3700v4,WNDR3700_V4,ttyS0,115200,$$(wndr4300_mtdlayout),0x33373033,WNDR3700v4,"",-H 29763948+128+128,wndr4300))
 $(eval $(call SingleProfile,NetgearNAND,64k,WNDR4300V1,wndr4300,WNDR4300,ttyS0,115200,$$(wndr4300_mtdlayout),0x33373033,WNDR4300,"",-H 29763948+0+128+128+2x2+3x3,wndr4300))
 
 $(eval $(call SingleProfile,ZyXELNAND,128k,NBG6716,nbg6716,NBG6716,ttyS0,115200,NBG6716,$$(zyx_nbg6716_mtdlayout),mem=256M))

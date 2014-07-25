@@ -229,6 +229,9 @@ ar71xx_board_detect() {
 	*"Oolite V1.0")
 		name="oolite"
 		;;
+	*"AirGateway")
+		name="airgateway"
+		;;
 	*"AirRouter")
 		name="airrouter"
 		;;
@@ -273,6 +276,9 @@ ar71xx_board_detect() {
 		;;
 	*AP83)
 		name="ap83"
+		;;
+	*"Archer C5")
+		name="archer-c5"
 		;;
 	*"Archer C7")
 		name="archer-c7"
@@ -408,6 +414,9 @@ ar71xx_board_detect() {
 		;;
 	*"OM2P LC")
 		name="om2p-lc"
+		;;
+	*OM5P)
+		name="om5p"
 		;;
 	*PB42)
 		name="pb42"
@@ -660,6 +669,9 @@ ar71xx_board_detect() {
 		;;
 	*"WNDR3700/WNDR3800/WNDRMAC")
 		wndr3700_board_detect "$machine"
+		;;
+	*"WNDR3700v4")
+		name="wndr3700v4"
 		;;
 	*"WNDR4300")
 		name="wndr4300"

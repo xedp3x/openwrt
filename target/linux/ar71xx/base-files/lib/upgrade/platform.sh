@@ -186,6 +186,7 @@ platform_check_image() {
 	tew-712br | \
 	tew-732br | \
 	wrt400n | \
+	airgateway | \
 	airrouter | \
 	bullet-m | \
 	nanostation-m | \
@@ -244,11 +245,13 @@ platform_check_image() {
 	om2pv2 | \
 	om2p-hs | \
 	om2p-hsv2 | \
-	om2p-lc)
+	om2p-lc | \
+	om5p)
 		platform_check_image_openmesh "$magic_long" "$1" && return 0
 		return 1
 		;;
 
+	archer-c5 | \
 	archer-c7 | \
 	el-m150 | \
 	el-mini | \
@@ -343,6 +346,7 @@ platform_check_image() {
 		return 0
 		;;
 	nbg6716 | \
+	wndr3700v4 | \
 	wndr4300 )
 		nand_do_platform_check $board $1
 		return $?;
@@ -422,7 +426,8 @@ platform_do_upgrade() {
 	om2pv2 | \
 	om2p-hs | \
 	om2p-hsv2 | \
-	om2p-lc)
+	om2p-lc | \
+	om5p)
 		platform_do_upgrade_openmesh "$ARGV"
 		;;
 	uap-pro)
