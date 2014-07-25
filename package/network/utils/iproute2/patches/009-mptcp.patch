@@ -1,0 +1,115 @@
+diff --git a/include/linux/if.h b/include/linux/if.h
+index a55a9e0..e8e0c8e 100644
+--- a/include/linux/if.h
++++ b/include/linux/if.h
+@@ -109,6 +109,11 @@ enum net_device_flags {
+ #define IFF_DORMANT			IFF_DORMANT
+ #define IFF_ECHO			IFF_ECHO
+ 
++#define IFF_NOMULTIPATH	0x80000		/* Disable for MPTCP 		*/
++#define IFF_MPBACKUP	0x100000	/* Use as backup path for MPTCP */
++#define IFF_MPHANDOVER	0x200000	/* Use only when no other interface is
++					 * available for MPTCP */
++
+ #define IFF_VOLATILE	(IFF_LOOPBACK|IFF_POINTOPOINT|IFF_BROADCAST|IFF_ECHO|\
+ 		IFF_MASTER|IFF_SLAVE|IFF_RUNNING|IFF_LOWER_UP|IFF_DORMANT)
+ 
+diff --git a/ip/ipaddress.c b/ip/ipaddress.c
+index 8bb8511..00d4b69 100644
+--- a/ip/ipaddress.c
++++ b/ip/ipaddress.c
+@@ -102,6 +102,9 @@ static void print_link_flags(FILE *fp, unsigned flags, unsigned mdown)
+ 	_PF(BROADCAST);
+ 	_PF(POINTOPOINT);
+ 	_PF(MULTICAST);
++	_PF(NOMULTIPATH);
++	_PF(MPBACKUP);
++	_PF(MPHANDOVER);
+ 	_PF(NOARP);
+ 	_PF(ALLMULTI);
+ 	_PF(PROMISC);
+diff --git a/ip/iplink.c b/ip/iplink.c
+index 5e428da..a8d4582 100644
+--- a/ip/iplink.c
++++ b/ip/iplink.c
+@@ -62,6 +62,7 @@ void iplink_usage(void)
+ 	fprintf(stderr, "	                  [ dynamic { on | off } ]\n");
+ 	fprintf(stderr, "	                  [ multicast { on | off } ]\n");
+ 	fprintf(stderr, "	                  [ allmulticast { on | off } ]\n");
++	fprintf(stderr, "	                  [ multipath { on | off | backup | handover} ]\n");
+ 	fprintf(stderr, "	                  [ promisc { on | off } ]\n");
+ 	fprintf(stderr, "	                  [ trailers { on | off } ]\n");
+ 	fprintf(stderr, "	                  [ txqueuelen PACKETS ]\n");
+@@ -450,6 +451,21 @@ int iplink_parse(int argc, char **argv, struct iplink_req *req,
+ 				req->i.ifi_flags &= ~IFF_ALLMULTI;
+ 			} else
+ 				return on_off("allmulticast", *argv);
++		} else if (strcmp(*argv, "multipath") == 0) {
++			NEXT_ARG();
++			req->i.ifi_change |= IFF_NOMULTIPATH;
++			req->i.ifi_change |= IFF_MPBACKUP;
++			req->i.ifi_change |= IFF_MPHANDOVER;
++			if (strcmp(*argv, "on") == 0) {
++				req->i.ifi_flags &= ~IFF_NOMULTIPATH;
++			} else if (strcmp(*argv, "off") == 0) {
++				req->i.ifi_flags |= IFF_NOMULTIPATH;
++			} else if (strcmp(*argv, "backup") == 0) {
++				req->i.ifi_flags |= IFF_MPBACKUP;
++			} else if (strcmp(*argv, "handover") == 0) {
++				req->i.ifi_flags |= IFF_MPHANDOVER;
++			} else
++				return on_off("multipath", *argv);
+ 		} else if (strcmp(*argv, "promisc") == 0) {
+ 			NEXT_ARG();
+ 			req->i.ifi_change |= IFF_PROMISC;
+@@ -960,6 +976,21 @@ static int do_set(int argc, char **argv)
+ 				flags &= ~IFF_ALLMULTI;
+ 			} else
+ 				return on_off("allmulticast", *argv);
++		} else if (strcmp(*argv, "multipath") == 0) {
++			NEXT_ARG();
++			mask |= IFF_NOMULTIPATH;
++			mask |= IFF_MPBACKUP;
++			mask |= IFF_MPHANDOVER;
++			if (strcmp(*argv, "on") == 0) {
++				flags &= ~IFF_NOMULTIPATH;
++			} else if (strcmp(*argv, "off") == 0) {
++				flags |= IFF_NOMULTIPATH;
++			} else if (strcmp(*argv, "backup") == 0) {
++				flags |= IFF_MPBACKUP;
++			} else if (strcmp(*argv, "handover") == 0) {
++				flags |= IFF_MPHANDOVER;
++			} else
++				return on_off("multipath", *argv);
+ 		} else if (strcmp(*argv, "promisc") == 0) {
+ 			NEXT_ARG();
+ 			mask |= IFF_PROMISC;
+diff --git a/man/man8/ip-link.8.in b/man/man8/ip-link.8.in
+index f89785c..d1dad24 100644
+--- a/man/man8/ip-link.8.in
++++ b/man/man8/ip-link.8.in
+@@ -91,6 +91,8 @@ ip-link \- network device configuration
+ .br
+ .BR multicast " { " on " | " off " } |"
+ .br
++.BR multipath " { " on " | " off " | " backup " | " handover " } |"
++.br
+ .B  txqueuelen
+ .IR PACKETS " |"
+ .br
+@@ -474,6 +476,15 @@ change the
+ flag on the device.
+ 
+ .TP
++.BR "multipath on ", " multipath off", " multipath backup" or " multipath handover"
++change the
++.B MULTIPATH
++flag on the device, to enable/disable MPTCP for this interface. The backup-flag 
++will allow a subflow to be established across this interface, but only be used
++as backup. handover-flag indicates that his interface is not used at all (even 
++no subflow being established), as long as there are other interfaces available.
++
++.TP
+ .BR "dynamic on " or " dynamic off"
+ change the
+ .B DYNAMIC
