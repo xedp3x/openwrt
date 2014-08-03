@@ -26,6 +26,7 @@ case $1 in
         echo "  multipath device {on | off | backup | handover}"
         echo
         echo "show established conections: -c"
+        echo "show mullmesh info: -f"
         echo "show kernel config: -k"
         echo
         echo "Flag on the device, to enable/disable MPTCP for this interface. The backup-flag"
@@ -37,6 +38,9 @@ case $1 in
         exit 0 ;;
    "-c")
         cat /proc/net/mptcp
+        exit 0;;
+   "-f")
+        cat /proc/net/mptcp_fullmesh
         exit 0;;
    "-k")
         echo Enabled: `cat /proc/sys/net/mptcp/mptcp_enabled`

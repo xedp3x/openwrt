@@ -13,7 +13,7 @@ FEATURES:=squashfs ext4 vdi vmdk pcmcia targz
 SUBTARGETS=generic olpc xen_domu ep80579 net5501 kvm_guest geos alix2 thincan \
 	   rdc
 
-LINUX_VERSION:=3.14.13
+LINUX_VERSION:=3.14.15
 
 KERNELNAME:=bzImage
 
