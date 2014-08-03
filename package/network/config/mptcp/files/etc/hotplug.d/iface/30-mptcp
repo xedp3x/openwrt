@@ -22,10 +22,10 @@ set_default() {
     count=$(($count+1))
     [ "$config" = "$INTERFACE" ] && id=$count
     config_get mode "$config" multipath
-    [ "$mode" = "default" ] && {
+    [ "$mode" = "master" ] && {
         local gateway
         network_get_gateway gateway $config || {
-                logger -t multipath default device $DEVICE has no gateway!
+                logger -t multipath master device $DEVICE has no gateway!
                 #Fallback: use upcomming interface...
 		network_get_gateway gateway $INTERFACE
 		config=$INTERFACE
@@ -57,7 +57,7 @@ case "$mode" in
   "off")
         multipath $DEVICE off
         exit 0;;
-  "default")
+  "master")
         mode="on";;
   "on");;
   "backup");;
