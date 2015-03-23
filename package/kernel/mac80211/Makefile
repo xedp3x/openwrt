@@ -1,5 +1,5 @@
 #
-# Copyright (C) 2007-2014 OpenWrt.org
+# Copyright (C) 2007-2015 OpenWrt.org
 #
 # This is free software, licensed under the GNU General Public License v2.
 # See /LICENSE for more information.
@@ -11,7 +11,7 @@ include $(INCLUDE_DIR)/kernel.mk
 PKG_NAME:=mac80211
 
 PKG_VERSION:=2015-03-09
-PKG_RELEASE:=1
+PKG_RELEASE:=3
 PKG_SOURCE_URL:=http://mirror2.openwrt.org/sources
 PKG_BACKPORT_VERSION:=
 PKG_MD5SUM:=6d4b04e4ce8a1f54dabfb04f4709453c
@@ -109,8 +109,8 @@ Generic IEEE 802.11 Networking Stack (mac80211)
 endef
 
 PKG_LINUX_FIRMWARE_NAME:=linux-firmware
-PKG_LINUX_FIRMWARE_VERSION:=7f388b4885cf64d6b7833612052d20d4197af96f
-PKG_LINUX_FIRMWARE_SOURCE:=$(PKG_LINUX_FIRMWARE_NAME)-2014-06-04-$(PKG_LINUX_FIRMWARE_VERSION).tar.bz2
+PKG_LINUX_FIRMWARE_VERSION:=f404336ba808cbd57547196e13367079a23b822c
+PKG_LINUX_FIRMWARE_SOURCE:=$(PKG_LINUX_FIRMWARE_NAME)-2015-03-20-$(PKG_LINUX_FIRMWARE_VERSION).tar.bz2
 PKG_LINUX_FIRMWARE_PROTO:=git
 PKG_LINUX_FIRMWARE_SOURCE_URL:=https://git.kernel.org/pub/scm/linux/kernel/git/firmware/linux-firmware.git
 PKG_LINUX_FIRMWARE_SUBDIR:=$(PKG_LINUX_FIRMWARE_NAME)-$(PKG_LINUX_FIRMWARE_VERSION)
@@ -2009,6 +2009,11 @@ ifneq ($(CONFIG_BRCMFMAC_USB),)
 	$(INSTALL_DATA) \
 		$(PKG_BUILD_DIR)/$(PKG_LINUX_FIRMWARE_SUBDIR)/brcm/brcmfmac43143.bin \
 		$(1)/lib/firmware/brcm/
+endif
+ifneq ($(CONFIG_BRCMFMAC_PCIE),)
+	$(INSTALL_DATA) \
+		$(PKG_BUILD_DIR)/$(PKG_LINUX_FIRMWARE_SUBDIR)/brcm/brcmfmac43602-pcie.ap.bin \
+		$(1)/lib/firmware/brcm/brcmfmac43602-pcie.bin
 endif
 endef
 
