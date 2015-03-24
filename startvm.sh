@@ -1,14 +1,14 @@
 #!/bin/bash
 
-let "MAC1 = $RANDOM % 99 + 1"
-let "MAC2 = $RANDOM % 99 + 1"
-let "MAC3 = $RANDOM % 99 + 1"
-let "MAC4 = $RANDOM % 99 + 1"
+DEV1=tap0
+DEV2=tap1
 
-DEV=tap$1
+sudo openvpn --mktun --dev $DEV1
+sudo openvpn --mktun --dev $DEV2
+sudo ip link set dev $DEV1 up
+sudo ip link set dev $DEV2 up
+sudo ip add change dev $DEV1 192.168.11.1/24
+sudo ip add change dev $DEV2 192.168.11.2/24
 
-sudo openvpn --mktun --dev $DEV
-sudo brctl addif br0 $DEV
-sudo ip link set dev $DEV up
-qemu-system-mips -kernel bin/malta/openwrt-malta-be-vmlinux-initramfs.elf -nographic -m 256 -net nic,macaddr=52:54:${MAC1}:${MAC2}:${MAC3}:${MAC4} -net tap,ifname=$DEV,script=no,downscript=no
+qemu-system-mipsel -kernel bin/malta/openwrt-malta-le-vmlinux-initramfs.elf -nographic -m 256 -net nic -net tap,ifname=$DEV1,script=no,downscript=no -net nic -net tap,ifname=$DEV2,script=no,downscript=no
 
