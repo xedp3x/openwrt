@@ -17,14 +17,16 @@ proto_dhcp_init_config() {
 	proto_config_add_string sendopts
 	proto_config_add_boolean delegate
 	proto_config_add_string zone6rd
+	proto_config_add_string zone
+	proto_config_add_string mtu6rd
 }
 
 proto_dhcp_setup() {
 	local config="$1"
 	local iface="$2"
 
-	local ipaddr hostname clientid vendorid broadcast reqopts iface6rd sendopts delegate zone6rd
-	json_get_vars ipaddr hostname clientid vendorid broadcast reqopts iface6rd sendopts delegate zone6rd
+	local ipaddr hostname clientid vendorid broadcast reqopts iface6rd sendopts delegate zone6rd zone mtu6rd
+	json_get_vars ipaddr hostname clientid vendorid broadcast reqopts iface6rd sendopts delegate zone6rd zone mtu6rd
 
 	local opt dhcpopts
 	for opt in $reqopts; do
@@ -38,8 +40,10 @@ proto_dhcp_setup() {
 	[ "$broadcast" = 1 ] && broadcast="-B" || broadcast=
 	[ -n "$clientid" ] && clientid="-x 0x3d:${clientid//:/}" || clientid="-C"
 	[ -n "$iface6rd" ] && proto_export "IFACE6RD=$iface6rd"
-	[ -n "$iface6rd" ] && append dhcpopts "-O 212"
+	[ "$iface6rd" != 0 -a -f /lib/netifd/proto/6rd.sh ] && append dhcpopts "-O 212"
 	[ -n "$zone6rd" ] && proto_export "ZONE6RD=$zone6rd"
+	[ -n "$zone" ] && proto_export "ZONE=$zone"
+	[ -n "$mtu6rd" ] && proto_export "MTU6RD=$mtu6rd"
 	[ "$delegate" = "0" ] && proto_export "IFACE6RD_DELEGATE=0"
 
 	proto_export "INTERFACE=$config"

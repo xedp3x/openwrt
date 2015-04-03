@@ -179,7 +179,7 @@ Date:   Wed Jul 9 12:08:23 2014 +0200
  	/* Avoid PM error messages for devices disconnected while suspended
 --- a/drivers/usb/core/hub.c
 +++ b/drivers/usb/core/hub.c
-@@ -5263,11 +5263,10 @@ int usb_reset_device(struct usb_device *
+@@ -5334,11 +5334,10 @@ int usb_reset_device(struct usb_device *
  				else if (cintf->condition ==
  						USB_INTERFACE_BOUND)
  					rebind = 1;

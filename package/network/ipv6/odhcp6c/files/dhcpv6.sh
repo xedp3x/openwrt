@@ -19,20 +19,22 @@ proto_dhcpv6_init_config() {
 	proto_config_add_string zone_dslite
 	proto_config_add_string iface_map
 	proto_config_add_string zone_map
+	proto_config_add_string zone
 	proto_config_add_string 'ifaceid:ip6addr'
 	proto_config_add_string 'sourcerouting:bool'
 	proto_config_add_string "userclass"
 	proto_config_add_string "vendorclass"
 	proto_config_add_boolean delegate
 	proto_config_add_int "soltimeout"
+	proto_config_add_boolean fakeroutes
 }
 
 proto_dhcpv6_setup() {
 	local config="$1"
 	local iface="$2"
 
-	local reqaddress reqprefix clientid reqopts noslaaconly forceprefix norelease ip6prefix iface_dslite iface_map ifaceid sourcerouting userclass vendorclass delegate zone_dslite zone_map soltimeout
-	json_get_vars reqaddress reqprefix clientid reqopts noslaaconly forceprefix norelease ip6prefix iface_dslite iface_map ifaceid sourcerouting userclass vendorclass delegate zone_dslite zone_map soltimeout
+	local reqaddress reqprefix clientid reqopts noslaaconly forceprefix norelease ip6prefix iface_dslite iface_map ifaceid sourcerouting userclass vendorclass delegate zone_dslite zone_map zone soltimeout fakeroutes
+	json_get_vars reqaddress reqprefix clientid reqopts noslaaconly forceprefix norelease ip6prefix iface_dslite iface_map ifaceid sourcerouting userclass vendorclass delegate zone_dslite zone_map zone soltimeout fakeroutes
 
 
 	# Configure
@@ -70,6 +72,8 @@ proto_dhcpv6_setup() {
 	[ "$delegate" = "0" ] && proto_export "IFACE_MAP_DELEGATE=0"
 	[ -n "$zone_dslite" ] && proto_export "ZONE_DSLITE=$zone_dslite"
 	[ -n "$zone_map" ] && proto_export "ZONE_MAP=$zone_map"
+	[ -n "$zone" ] && proto_export "ZONE=$zone"
+	[ "$fakeroutes" != "0" ] && proto_export "FAKE_ROUTES=1"
 
 	proto_export "INTERFACE=$config"
 	proto_run_command "$config" odhcp6c \

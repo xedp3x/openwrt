@@ -1,6 +1,6 @@
 From: Felix Fietkau <nbd@openwrt.org>
 
-use -ffunction-sections, -fdata-sections and --gc-sections
+use -ffunction-sections, -fdata-sections and --gc-sections --sort-section=name
 
 In combination with kernel symbol export stripping this significantly reduces
 the kernel image size. Used on both ARM and MIPS architectures.
@@ -17,7 +17,7 @@ Signed-off-by: Gabor Juhos <juhosg@openwrt.org>
  cflags-y			+= -G 0 -mno-abicalls -fno-pic -pipe
  cflags-y			+= -msoft-float
 -LDFLAGS_vmlinux			+= -G 0 -static -n -nostdlib
-+LDFLAGS_vmlinux			+= -G 0 -static -n -nostdlib --gc-sections
++LDFLAGS_vmlinux			+= -G 0 -static -n -nostdlib --gc-sections --sort-section=name
  KBUILD_AFLAGS_MODULE		+= -mlong-calls
  KBUILD_CFLAGS_MODULE		+= -mlong-calls
  
@@ -346,6 +346,15 @@ Signed-off-by: Gabor Juhos <juhosg@openwrt.org>
  		*(COMMON)						\
  	}
  
+@@ -584,7 +585,7 @@
+ 	. = ALIGN(8);							\
+ 	__bug_table : AT(ADDR(__bug_table) - LOAD_OFFSET) {		\
+ 		VMLINUX_SYMBOL(__start___bug_table) = .;		\
+-		*(__bug_table)						\
++		KEEP(*(__bug_table))	\
+ 		VMLINUX_SYMBOL(__stop___bug_table) = .;			\
+ 	}
+ #else
 @@ -596,7 +597,7 @@
  	. = ALIGN(4);							\
  	.tracedata : AT(ADDR(.tracedata) - LOAD_OFFSET) {		\
@@ -409,7 +418,7 @@ Signed-off-by: Gabor Juhos <juhosg@openwrt.org>
  LDFLAGS_vmlinux	+= --be8
  LDFLAGS_MODULE	+= --be8
  endif
-+LDFLAGS_vmlinux += --gc-sections
++LDFLAGS_vmlinux += --gc-sections --sort-section=name
  
  OBJCOPYFLAGS	:=-O binary -R .comment -S
  GZFLAGS		:=-9

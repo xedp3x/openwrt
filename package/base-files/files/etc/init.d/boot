@@ -46,12 +46,11 @@ boot() {
 	}
 	rm -f /tmp/wireless.tmp
 
+	/bin/board_detect
 	uci_apply_defaults
 	
 	# temporary hack until configd exists
 	/sbin/reload_config
-
-	start
 
 	# create /dev/root if it doesn't exist
 	[ -e /dev/root -o -h /dev/root ] || {

@@ -15,7 +15,7 @@
  	default y
 --- a/drivers/pci/quirks.c
 +++ b/drivers/pci/quirks.c
-@@ -44,6 +44,7 @@ static void quirk_mmio_always_on(struct
+@@ -44,6 +44,7 @@ static void quirk_mmio_always_on(struct 
  DECLARE_PCI_FIXUP_CLASS_EARLY(PCI_ANY_ID, PCI_ANY_ID,
  				PCI_CLASS_BRIDGE_HOST, 8, quirk_mmio_always_on);
  
@@ -40,9 +40,9 @@
  /*
   * Some BIOS implementations leave the Intel GPU interrupts enabled,
   * even though no one is handling them (f.e. i915 driver is never loaded).
-@@ -2931,6 +2935,8 @@ static void disable_igfx_irq(struct pci_
- DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x0102, disable_igfx_irq);
+@@ -2932,6 +2936,8 @@ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_IN
  DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x010a, disable_igfx_irq);
+ DECLARE_PCI_FIXUP_FINAL(PCI_VENDOR_ID_INTEL, 0x0152, disable_igfx_irq);
  
 +#endif /* !CONFIG_PCI_DISABLE_COMMON_QUIRKS */
 +

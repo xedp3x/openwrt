@@ -10,6 +10,9 @@ include $(INCLUDE_DIR)/image.mk
 UBIFS_OPTS = -F -m 2048 -e 126KiB -c 2048 -U
 UBI_OPTS = -m 2048 -p 128KiB -s 512
 
+AT91SAMA5D3XPLAINED_UBIFS_OPTS = -m 2048 -e 124KiB -c 2048
+AT91SAMA5D3XPLAINED_UBI_OPTS = -m 2048 -p 128KiB -s 2048
+
 define Build/Clean
 	$(MAKE) -C u-boot clean
 endef
@@ -25,7 +28,7 @@ define Image/Prepare
 endef
 
 define MkuImageDtb
-	cat $(KDIR)/zImage $(LINUX_DIR)/arch/arm/boot/dts/$(2).dtb > $(KDIR)/zImage-$(1)
+	cat $(KDIR)/zImage $(DTS_DIR)/$(2).dtb > $(KDIR)/zImage-$(1)
 	mkimage -A arm -T kernel -C none -a 0x20008000 -e 0x20008000 \
 		-n "OpenWrt ARM $(LINUX_VERSION)" \
 		-d $(KDIR)/zImage-$(1) $(BIN_DIR)/$(IMG_PREFIX)-$(1)-uImage
@@ -33,7 +36,7 @@ endef
 
 define MkOftree
 	cp -u $(KDIR)/zImage $(BIN_DIR)/$(IMG_PREFIX)-zImage
-	cp $(LINUX_DIR)/arch/arm/boot/dts/$(2).dtb $(BIN_DIR)/$(IMG_PREFIX)-$(1)-oftree.dtb
+	cp $(DTS_DIR)/$(2).dtb $(BIN_DIR)/$(IMG_PREFIX)-$(1)-oftree.dtb
 endef
 
 # Atmel
@@ -46,9 +49,10 @@ Image/Build/Kernel/AT91SAM9G35EK=$(call MkuImageDtb,9g35ek,at91sam9g35ek)
 Image/Build/Kernel/AT91SAM9M10G45EK=$(call MkuImageDtb,9m10g45ek,at91sam9m10g45ek)
 Image/Build/Kernel/AT91SAM9X25EK=$(call MkuImageDtb,9x25ek,at91sam9x25ek)
 Image/Build/Kernel/AT91SAM9X35EK=$(call MkuImageDtb,9x35ek,at91sam9x35ek)
+Image/Build/Kernel/AT91SAMA5D3XPLAINED=$(call MkuImageDtb,sama5,at91-sama5d3_xplained)
 # CalAmp
 Image/Build/Kernel/LMU5000=$(call MkuImageDtb,lmu5000,lmu5000)
-# Caloa
+# Calao
 Image/Build/Kernel/TNYA9260=$(call MkuImageDtb,tny_a9260,tny_a9260)
 Image/Build/Kernel/TNYA9263=$(call MkuImageDtb,tny_a9263,tny_a9263)
 Image/Build/Kernel/TNYA9G20=$(call MkuImageDtb,tny_a9g20,tny_a9g20)
@@ -57,6 +61,9 @@ Image/Build/Kernel/USBA9263=$(call MkuImageDtb,usb_a9263,usb_a9263)
 Image/Build/Kernel/USBA9G20=$(call MkuImageDtb,usb_a9g20,usb_a9g20)
 # Ethernut
 Image/Build/Kernel/ETHERNUT5=$(call MkuImageDtb,ethernut5,ethernut5)
+# Exegin
+Image/Build/Kernel/Q5XR5=$(call MkOftree,q5xr5,at91-q5xr5)
+
 
 define Image/Build/Kernel/Default
 	$(call Image/Build/Kernel/AT91SAM9263EK)
@@ -68,6 +75,7 @@ define Image/Build/Kernel/Default
 	$(call Image/Build/Kernel/AT91SAM9M10G45EK)
 	$(call Image/Build/Kernel/AT91SAM9X25EK)
 	$(call Image/Build/Kernel/AT91SAM9X35EK)
+	$(call Image/Build/Kernel/AT91SAMA5D3XPLAINED)
 	$(call Image/Build/Kernel/LMU5000)
 	$(call Image/Build/Kernel/TNYA9260)
 	$(call Image/Build/Kernel/TNYA9263)
@@ -76,6 +84,7 @@ define Image/Build/Kernel/Default
 	$(call Image/Build/Kernel/USBA9263)
 	$(call Image/Build/Kernel/USBA9G20)
 	$(call Image/Build/Kernel/ETHERNUT5)
+	$(call Image/Build/Kernel/Q5XR5)
 endef
 
 define Image/BuildKernel

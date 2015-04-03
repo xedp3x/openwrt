@@ -21,7 +21,7 @@ endef
 
 define MkuImage
 	mkimage -A mips -O linux -T kernel -a 0x80100000 -C $(1) $(2) \
-		-e $(call get_kernel_entry,$(LINUX_DIR)/vmlinux) -n 'MIPS OpenWrt Linux-$(LINUX_VERSION)' \
+		-e $(call get_kernel_entry,$(KDIR)/vmlinux.debug) -n 'MIPS OpenWrt Linux-$(LINUX_VERSION)' \
 		-d $(3) $(4)
 endef
 
@@ -35,6 +35,11 @@ endef
 
 define Image/Build/squashfs
     $(call prepare_generic_squashfs,$(KDIR)/root.squashfs)
+endef
+
+define Image/Build/Initramfs
+	cp $(KDIR)/vmlinux-initramfs.elf $(BIN_DIR)/$(IMG_PREFIX)-vmlinux-initramfs.elf
+	cp $(KDIR)/vmlinux-initramfs $(BIN_DIR)/$(IMG_PREFIX)-vmlinux-initramfs.bin
 endef
 
 define Image/Build
